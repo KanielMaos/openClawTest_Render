@@ -1,0 +1,27 @@
+services:
+  - name: openclaw
+    type: web
+    env: docker
+    plan: starter
+    dockerfilePath: Dockerfile
+    dockerContext: .
+    autoDeploy: true
+    healthCheckPath: /health
+    disk:
+      name: openclaw-data
+      mountPath: /var/lib/openclaw
+      sizeGB: 10
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: PORT
+        value: 10000 # Render will override with its assigned port
+      # Renseignez vos clés dans le dashboard Render (ou via env var groups)
+      - key: OPENAI_API_KEY
+        sync: false
+      - key: ANTHROPIC_API_KEY
+        sync: false
+      - key: EXTERNAL_URL
+        value: https://your-domain.onrender.com
+      - key: OPENCLAW_DATA_DIR
+        value: /var/lib/openclaw

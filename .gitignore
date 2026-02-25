@@ -1,0 +1,22 @@
+# Secrets / env
+.env
+
+# Runtime data
+data/
+logs/
+
+# Node
+node_modules/
+npm-debug.log*
+
+# Python
+__pycache__/
+
+# Docker artifacts
+*.pid
+*.log
+*.tar.gz
+
+# OS
+.DS_Store
+Thumbs.db
