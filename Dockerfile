@@ -5,16 +5,21 @@ ENV DEBIAN_FRONTEND=noninteractive
 # System deps (git for clone, python3.11, curl for health checks)
 RUN apt-get update && apt-get install -y --no-install-recommends \
     python3.11 python3.11-venv python3-pip \
-    ca-certificates git curl \
+    ca-certificates git curl build-essential \
  && rm -rf /var/lib/apt/lists/*
+
+# pnpm (utilisé par les scripts de build OpenClaw)
+RUN corepack enable && corepack prepare pnpm@latest --activate
 
 WORKDIR /app
 
 # Clone the upstream OpenClaw repository; replace URL if you use a fork
 RUN git clone https://github.com/openclaw/openclaw.git .
 
-# Install JS dependencies (prefer npm ci when lockfile present)
-RUN if [ -f package-lock.json ]; then npm ci --legacy-peer-deps; else npm install --legacy-peer-deps; fi
+# Install JS dependencies
+RUN if [ -f pnpm-lock.yaml ]; then pnpm install --frozen-lockfile; \
+    elif [ -f package-lock.json ]; then npm ci --legacy-peer-deps; \
+    else npm install --legacy-peer-deps; fi
 
 # Build step is optional; keep here if the project ships a build script
 RUN if npm run | grep -q "build"; then npm run build; fi
