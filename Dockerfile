@@ -3,10 +3,9 @@ FROM node:20-bookworm-slim
 ENV DEBIAN_FRONTEND=noninteractive
 
 # System deps (git for clone, python3.11, curl for health checks)
-RUN apt-get update \\
- && apt-get install -y --no-install-recommends \\
-    python3.11 python3.11-venv python3-pip \\
-    ca-certificates git curl \\
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    python3.11 python3.11-venv python3-pip \
+    ca-certificates git curl \
  && rm -rf /var/lib/apt/lists/*
 
 WORKDIR /app
